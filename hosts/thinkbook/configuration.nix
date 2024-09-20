@@ -4,7 +4,7 @@ let
   username = "skewbik";
   userDescription = "main user";
   homeDirectory = "/home/${username}";
-  hostName = "home";
+  hostName = "thinkbook";
   timeZone = "Europe/Moscow";
 in
 {
@@ -177,7 +177,7 @@ in
   vim neovim vscode zed-editor jetbrains.idea-community-bin neovide
 
   # Programming languages and tools
-  go lua python3 clang zig rustup
+  go lua python3 clang rustup
   nodePackages_latest.pnpm nodePackages_latest.yarn nodePackages_latest.nodejs
   bun jdk fnm
 
@@ -201,7 +201,7 @@ in
   pulseaudio pavucontrol ffmpeg mpv
 
   # Image and graphics
-  imagemagick nomacs gimp hyprpicker swww hyprlock waypaper imv
+  imagemagick nomacs gimp hyprpicker swww hyprlock imv
 
   # Productivity and office
   obsidian libreoffice-qt6-fresh spacedrive
@@ -221,7 +221,7 @@ in
   swappy appimage-run yad playerctl nh ansible
 
   # Wayland specific
-  hyprshot hypridle grim slurp waybar dunst wl-clipboard swaynotificationcenter
+  hyprshot rofi hypridle grim slurp waybar dunst wl-clipboard swaynotificationcenter
 
   # Virtualization
   libvirt
@@ -281,6 +281,10 @@ in
       enable = true;
       vt = 3;
       settings = {
+        initial_session = {
+          user = username;
+          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
+        };
         default_session = {
           user = username;
           command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
@@ -379,7 +383,10 @@ in
     };
   };
 
-  programs.hyprland.enable = true;
+  programs.hyprland = {
+    enable = true;
+  };
+
   home-manager = {
     useGlobalPkgs = true;
     extraSpecialArgs = { inherit inputs;};

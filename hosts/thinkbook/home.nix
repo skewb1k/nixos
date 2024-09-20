@@ -10,13 +10,13 @@ in
     username = userName;
     homeDirectory = homeDirectory;
     stateVersion = stateVersion;
-    # pointerCursor = {
-    #   name = "macOS-Monterey";
-    #   package = pkgs.apple-cursor;
-    #   size = 16;
-    #   gtk.enable = true;
-    #   x11.enable = true;
-    # };
+    pointerCursor = {
+      name = "macOS-Monterey";
+      package = pkgs.apple-cursor;
+      size = 16;
+      gtk.enable = true;
+      x11.enable = true;
+    };
 
     file = {
       # Hyprland Config
@@ -60,26 +60,6 @@ in
   # imports = [
   #   ../../config/wlogout.nix
   # ];
-
-  # Styling
-  # stylix.targets.waybar.enable = false;
-  # gtk = {
-  #   iconTheme = {
-  #     name = "Papirus-Dark";
-  #     package = pkgs.papirus-icon-theme;
-  #   };
-  #   gtk3.extraConfig = {
-  #     gtk-application-prefer-dark-theme = 1;
-  #   };
-  #   gtk4.extraConfig = {
-  #     gtk-application-prefer-dark-theme = 1;
-  #   };
-  # };
-  # qt = {
-  #  enable = true;
-  #  style.name = "adwaita-dark";
-  #  platformTheme.name = "gtk3";
-  # };
 
   # services.hypridle = {
   #   settings = {
