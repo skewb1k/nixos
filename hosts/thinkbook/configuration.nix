@@ -11,17 +11,12 @@ in
   imports =
     [
       ./hardware-configuration.nix
-      inputs.home-manager.nixosModules.default
     ];
 
   boot = {
     kernelModules = [ "kvm-amd" ];
     initrd.kernelModules = [ "amdgpu" ];
-    # kernelPackages = pkgs.linuxPackages_zen;
-    # extraModulePackages = [ config.boot.kernelPackages.v4l2loopback ];
-    # kernel.sysctl = {
-    #   "vm.max_map_count" = 2147483642;
-    # };
+
     loader = {
       efi = {
         canTouchEfiVariables = true;
@@ -61,105 +56,6 @@ in
     };
   };
 
-  # stylix = {
-  #   enable = true;
-  #   base16Scheme = {
-  #     base00 = "191724";
-  #     base01 = "1f1d2e";
-  #     base02 = "26233a";
-  #     base03 = "6e6a86";
-  #     base04 = "908caa";
-  #     base05 = "e0def4";
-  #     base06 = "e0def4";
-  #     base07 = "524f67";
-  #     base08 = "eb6f92";
-  #     base09 = "f6c177";
-  #     base0A = "ebbcba";
-  #     base0B = "31748f";
-  #     base0C = "9ccfd8";
-  #     base0D = "c4a7e7";
-  #     base0E = "f6c177";
-  #     base0F = "524f67";
-  #   };
-  #   image = ../../config/assets/wall.png;
-  #   polarity = "dark";
-  #   opacity.terminal = 0.8;
-  #   cursor.package = pkgs.bibata-cursors;
-  #   cursor.name = "Bibata-Modern-Ice";
-  #   cursor.size = 24;
-  #   fonts = {
-  #     monospace = {
-  #       package = pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; };
-  #       name = "JetBrainsMono Nerd Font Mono";
-  #     };
-  #     sansSerif = {
-  #       package = pkgs.montserrat;
-  #       name = "Montserrat";
-  #     };
-  #     serif = {
-  #       package = pkgs.montserrat;
-  #       name = "Montserrat";
-  #     };
-  #     sizes = {
-  #       applications = 12;
-  #       terminal = 15;
-  #       desktop = 11;
-  #       popups = 12;
-  #     };
-  #   };
-  # };
-
-  virtualisation = {
-    docker = {
-      enable = true;
-    };
-  };
-
-  programs = {
-    zsh = {
-      enable = true;
-      autosuggestions.enable = true;
-      enableCompletion = true;
-      syntaxHighlighting.enable = true;
-      shellAliases =
-        let
-          flakeDir = "~/nixos-config";
-        in {
-        rb = "sudo nixos-rebuild switch --flake ${flakeDir}";
-        upd = "sudo nix flake update ${flakeDir}";
-        upg = "sudo nixos-rebuild switch --upgrade --flake ${flakeDir}";
-        scg = "sudo nix-collect-garbage -d";
-        hms = "home-manager switch --flake ${flakeDir}";
-        hlr = "hyprctl reload";
-
-        ff = "fastfetch";
-        ".."="cd ..";
-        v="vim";
-        nv="nvim";
-        c="clear";
-
-        ssn="sudo shutdown 0";
-        srb="sudo reboot 0";
-        dcrm="docker container prune -f && docker image prune -f && docker network prune -f && docker volume prune -f";
-      };
-      ohMyZsh = {
-        enable = true;
-        plugins = [ "git" "sudo" ];
-        theme = "agnoster";
-      };
-    };
-    nix-ld = {
-      enable = true;
-      package = pkgs.nix-ld-rs;
-    };
-    dconf.enable = true;
-    fuse.userAllowOther = true;
-    gnupg.agent = {
-      enable = true;
-      enableSSHSupport = true;
-    };
-  };
-
   nixpkgs.config.allowUnfree = true;
 
   users = {
@@ -192,7 +88,6 @@ in
 
   # System monitoring and management
   htop btop lm_sensors inxi
-#   auto-cpufreq
 
   # Network and internet tools
   qbittorrent
@@ -201,13 +96,17 @@ in
   pulseaudio pavucontrol ffmpeg mpv
 
   # Image and graphics
-  imagemagick nomacs gimp hyprpicker swww hyprlock imv
+  nomacs
+  gimp
+  imv
 
   # Productivity and office
-  obsidian libreoffice-qt6-fresh spacedrive
+  obsidian
+  spacedrive
 
   # Communication and social
-  telegram-desktop vesktop
+  telegram-desktop
+  vesktop
 
   # Browsers
   firefox-devedition
@@ -216,35 +115,59 @@ in
   stremio
 
   # System utilities
-  libgcc bc kdePackages.dolphin lxqt.lxqt-policykit libnotify v4l-utils ydotool
-  pciutils socat cowsay ripgrep lshw bat pkg-config brightnessctl virt-viewer
-  swappy appimage-run yad playerctl nh ansible
-
-  # Wayland specific
-  hyprshot rofi hypridle grim slurp waybar dunst wl-clipboard swaynotificationcenter
+  libgcc
+  kdePackages
+  lxqt
+  policykit
+  libnotify
+  v4l
+  utils
+  ydotool
+  pciutils
+  socat
+  cowsay
+  ripgrep
+  lshw
+  bat
+  config
+  brightnessctl
+  virt
+  viewe
+  swappy
+  appimage
+  run
+  yad
+  playerctl
+  nh ansible
 
   # Virtualization
   libvirt
 
   # File systems
-  ntfs3g os-prober
+  ntfs3g
+  os-prober
 
   # Downloaders
-  yt-dlp localsend
+  yt
+  dlp localsend
 
   # Clipboard managers
   cliphist
 
   # Fun and customization
-  cmatrix lolcat fastfetch onefetch microfetch
+  cmatrix
+  lolcat
+  fastfetch
+  onefetch
+  microfetch
 
   # Networking
   networkmanagerapplet
 
   # Music and streaming
-  youtube-music spotify
-
-];
+  youtube
+  music spotify
+  ];
 
   fonts.packages = with pkgs; [
     noto-fonts-emoji
@@ -259,38 +182,7 @@ in
     nerd-font-patcher
   ];
 
-  xdg.portal = {
-    enable = true;
-    wlr.enable = true;
-    extraPortals = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal
-    ];
-    configPackages = [
-      pkgs.xdg-desktop-portal-gtk
-      pkgs.xdg-desktop-portal-hyprland
-      pkgs.xdg-desktop-portal
-    ];
-  };
-
   services = {
-    xserver = {
-      enable = false;
-    };
-    greetd = {
-      enable = true;
-      vt = 3;
-      settings = {
-        initial_session = {
-          user = username;
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
-        };
-        default_session = {
-          user = username;
-          command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
-        };
-      };
-    };
     supergfxd.enable = true;
     libinput.enable = true;
     fstrim.enable = true;
@@ -381,10 +273,6 @@ in
       dates = "weekly";
       options = "--delete-older-than 7d";
     };
-  };
-
-  programs.hyprland = {
-    enable = true;
   };
 
   home-manager = {
