@@ -12,9 +12,9 @@
       thinkbook= nixpkgs.lib.nixosSystem {
         specialArgs = { inherit inputs; };
         modules = [
-          ./modules/zsh/module.nix
-          ./modules/hypr/module.nix
-          ./modules/waybar/module.nix
+          # ./modules/zsh/module.nix
+          # ./modules/hypr/module.nix
+          # ./modules/waybar/module.nix
           ./hosts/thinkbook/configuration.nix
           inputs.home-manager.nixosModules.default
         ];

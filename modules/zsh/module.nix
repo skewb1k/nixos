@@ -31,4 +31,5 @@
       plugins = [ "git" "sudo" ];
       theme = "agnoster";
     };
+  };
 }

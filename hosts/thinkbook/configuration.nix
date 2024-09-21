@@ -11,6 +11,9 @@ in
   imports =
     [
       ./hardware-configuration.nix
+      ../../modules/hypr/module.nix
+      ../../modules/zsh/module.nix
+      ../../modules/waybar/module.nix
     ];
 
   boot = {
@@ -96,17 +99,13 @@ in
   pulseaudio pavucontrol ffmpeg mpv
 
   # Image and graphics
-  nomacs
-  gimp
-  imv
+  nomacs gimp imv
 
   # Productivity and office
-  obsidian
-  spacedrive
+  obsidian spacedrive
 
   # Communication and social
-  telegram-desktop
-  vesktop
+  telegram-desktop vesktop
 
   # Browsers
   firefox-devedition
@@ -115,59 +114,32 @@ in
   stremio
 
   # System utilities
-  libgcc
-  kdePackages
-  lxqt
-  policykit
-  libnotify
-  v4l
-  utils
-  ydotool
-  pciutils
-  socat
-  cowsay
-  ripgrep
-  lshw
-  bat
-  config
-  brightnessctl
-  virt
-  viewe
-  swappy
-  appimage
-  run
-  yad
-  playerctl
-  nh ansible
+  libgcc bc kdePackages.dolphin lxqt.lxqt-policykit libnotify v4l-utils ydotool
+  pciutils socat cowsay ripgrep lshw bat pkg-config brightnessctl virt-viewer
+  swappy appimage-run yad playerctl nh ansible
 
   # Virtualization
   libvirt
 
   # File systems
-  ntfs3g
-  os-prober
+  ntfs3g os-prober
 
   # Downloaders
-  yt
-  dlp localsend
+  yt-dlp localsend
 
   # Clipboard managers
   cliphist
 
   # Fun and customization
-  cmatrix
-  lolcat
-  fastfetch
-  onefetch
-  microfetch
+  cmatrix lolcat fastfetch onefetch microfetch
 
   # Networking
   networkmanagerapplet
 
   # Music and streaming
-  youtube
-  music spotify
-  ];
+  youtube-music spotify
+
+];
 
   fonts.packages = with pkgs; [
     noto-fonts-emoji

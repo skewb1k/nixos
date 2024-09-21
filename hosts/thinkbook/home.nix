@@ -1,13 +1,13 @@
 { config, pkgs, ... }:
 
 let
-  userName = "skewbik";
-  homeDirectory = "/home/${userName}";
+  username = "skewbik";
+  homeDirectory = "/home/${username}";
   stateVersion = "24.05";
 in
 {
   home = {
-    username = userName;
+    username = username;
     homeDirectory = homeDirectory;
     stateVersion = stateVersion;
     pointerCursor = {
@@ -17,6 +17,8 @@ in
       gtk.enable = true;
       x11.enable = true;
     };
+  };
+
 
   # services.hypridle = {
   #   settings = {

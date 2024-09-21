@@ -1,10 +1,10 @@
-{ pkgs, username, ... }:
+{ pkgs, ... }:
 {
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
-  home.file.".config/hypr/hyprland.conf".source = ./hyprland.conf;
+  home-manager.users.skewbik.home.file.".config/hypr/hyprland.conf".source = ./hyprland.conf;
 
   services = {
     xserver.enable = false;
@@ -13,7 +13,7 @@
       vt = 3;
       settings = {
         default_session = {
-          user = username;
+          user = "skewbik";
           command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
         };
       };
@@ -43,7 +43,7 @@
     grim
     slurp
     dunst
-    clipboard
+    # clipboard
     swaynotificationcenter
   ];
 }
