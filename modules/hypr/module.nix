@@ -1,10 +1,15 @@
-{ pkgs, ... }:
+{
+  pkgs,
+  user,
+  ...
+}:
+
 {
   programs.hyprland = {
     enable = true;
     xwayland.enable = true;
   };
-  home-manager.users.skewbik.home.file.".config/hypr/hyprland.conf".source = ./hyprland.conf;
+  home-manager.users.${user}.home.file.".config/hypr/hyprland.conf".source = ./hyprland.conf;
 
   services = {
     xserver.enable = false;
@@ -13,12 +18,13 @@
       vt = 3;
       settings = {
         default_session = {
-          user = "skewbik";
+          user = user;
           command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd Hyprland";
         };
       };
     };
   };
+
   xdg.portal = {
     enable = true;
     wlr.enable = true;

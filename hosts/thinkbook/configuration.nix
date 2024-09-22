@@ -1,20 +1,21 @@
-{ config, lib, pkgs, inputs, options, ... }:
-
-let
-  username = "skewbik";
-  userDescription = "main user";
-  homeDirectory = "/home/${username}";
-  hostName = "thinkbook";
-  timeZone = "Europe/Moscow";
-in
 {
-  imports =
-    [
-      ./hardware-configuration.nix
-      ../../modules/hypr/module.nix
-      ../../modules/zsh/module.nix
-      ../../modules/waybar/module.nix
-    ];
+  inputs,
+  lib,
+  pkgs,
+  options,
+  user,
+  ...
+}:
+
+{
+  imports = [
+    ./hardware-configuration.nix
+    ../../modules/zsh/module.nix
+    ../../modules/waybar/module.nix
+    ../../modules/virt.nix
+    ../../modules/gnupg.nix
+    ../../modules/hypr/module.nix
+  ];
 
   boot = {
     kernelModules = [ "kvm-amd" ];
@@ -31,115 +32,164 @@ in
         efiSupport = true;
         useOSProber = true;
       };
-      timeout = 4;
+      timeout = 3;
     };
     plymouth.enable = true;
   };
 
   networking = {
-    hostName = hostName;
+    hostName = "thinkbook";
     networkmanager.enable = true;
     timeServers = options.networking.timeServers.default ++ [ "pool.ntp.org" ];
   };
 
-  time.timeZone = timeZone;
-
-  i18n = {
-    defaultLocale = "en_US.UTF-8";
-    extraLocaleSettings = {
-      LC_ADDRESS = "en_US.UTF-8";
-      LC_IDENTIFICATION = "en_US.UTF-8";
-      LC_MEASUREMENT = "en_US.UTF-8";
-      LC_MONETARY = "en_US.UTF-8";
-      LC_NAME = "en_US.UTF-8";
-      LC_NUMERIC = "en_US.UTF-8";
-      LC_PAPER = "en_US.UTF-8";
-      LC_TELEPHONE = "en_US.UTF-8";
-      LC_TIME = "en_US.UTF-8";
-    };
-  };
-
-  nixpkgs.config.allowUnfree = true;
+  time.timeZone = "Europe/Moscow";
+  i18n.defaultLocale = "en_US.UTF-8";
 
   users = {
-    mutableUsers = true;
-    users.${username} = {
+    users.${user} = {
       isNormalUser = true;
       shell = pkgs.zsh;
-      description = userDescription;
-      extraGroups = [ "networkmanager" "input" "wheel" "video" "audio" "tss" "docker" ];
+      extraGroups = [
+        "networkmanager"
+        "input"
+        "wheel"
+        "video"
+        "audio"
+        "tss"
+        "docker"
+      ];
     };
   };
 
   environment.systemPackages = with pkgs; [
-  # Text editors and IDEs
-  vim neovim vscode zed-editor jetbrains.idea-community-bin neovide
+    # Text editors and IDEs
+    vim
+    neovim
+    vscode
+    zed-editor
+    # jetbrains.idea-community-bin
+    neovide
 
-  # Programming languages and tools
-  go lua python3 clang rustup
-  nodePackages_latest.pnpm nodePackages_latest.yarn nodePackages_latest.nodejs
-  bun jdk fnm
+    # Programming languages and tools
+    go
+    lua
+    python3
+    clang
+    rustup
+    nodePackages_latest.pnpm
+    nodePackages_latest.yarn
+    nodePackages_latest.nodejs
+    bun
+    jdk
+    # fnm
 
-  # Version control and development tools
-  git gh lazygit lazydocker bruno gnumake coreutils nixfmt-rfc-style meson
+    # Version control and development tools
+    git
+    gh
+    lazygit
+    lazydocker
+    bruno
+    gnumake
+    coreutils
+    nixfmt-rfc-style
+    nil
 
-  # Shell and terminal utilities
-  stow wget killall eza starship alacritty zoxide fzf tmux progress tree
+    # Shell and terminal utilities
+    wget
+    killall
+    eza
+    starship
+    alacritty
+    zoxide
+    fzf
+    tmux
+    tree
 
-  # File management and archives
-  yazi p7zip unzip unrar ncdu duf
+    # File management and archives
+    yazi
+    p7zip
+    unzip
+    unrar
+    ncdu
+    duf
 
-  # System monitoring and management
-  htop btop lm_sensors inxi
+    # System monitoring and management
+    htop
+    btop
+    lm_sensors
 
-  # Network and internet tools
-  qbittorrent
+    # Network and internet tools
+    qbittorrent
 
-  # Audio and video
-  pulseaudio pavucontrol ffmpeg mpv
+    # Audio and video
+    pulseaudio
+    pavucontrol
+    ffmpeg
+    mpv
 
-  # Image and graphics
-  nomacs gimp imv
+    # Image and graphics
+    nomacs
+    gimp
+    imv
 
-  # Productivity and office
-  obsidian spacedrive
+    # Productivity and office
+    obsidian
+    spacedrive
 
-  # Communication and social
-  telegram-desktop vesktop
+    # Communication and social
+    telegram-desktop
+    vesktop
 
-  # Browsers
-  firefox-devedition
+    # Browsers
+    firefox-devedition
 
-  # Gaming and entertainment
-  stremio
+    # Gaming and entertainment
+    stremio
 
-  # System utilities
-  libgcc bc kdePackages.dolphin lxqt.lxqt-policykit libnotify v4l-utils ydotool
-  pciutils socat cowsay ripgrep lshw bat pkg-config brightnessctl virt-viewer
-  swappy appimage-run yad playerctl nh ansible
+    # System utilities
+    libgcc
+    bc
+    lxqt.lxqt-policykit
+    libnotify
+    # v4l-utils
+    # ydotool
+    # pciutils
+    # socat
+    # cowsay
+    ripgrep
+    lshw
+    bat
+    brightnessctl
+    virt-viewer
+    # swappy
+    appimage-run
+    playerctl
+    nh
 
-  # Virtualization
-  libvirt
+    # Virtualization
+    libvirt
 
-  # File systems
-  ntfs3g os-prober
+    # File systems
+    ntfs3g
+    os-prober
 
-  # Downloaders
-  yt-dlp localsend
+    # Downloaders
+    yt-dlp
 
-  # Clipboard managers
-  cliphist
+    # Clipboard managers
+    cliphist
 
-  # Fun and customization
-  cmatrix lolcat fastfetch onefetch microfetch
+    # Fun and customization
+    cmatrix
+    fastfetch
 
-  # Networking
-  networkmanagerapplet
+    # Networking
+    networkmanagerapplet
 
-  # Music and streaming
-  youtube-music spotify
-
-];
+    # Music and streaming
+    spotify
+  ];
 
   fonts.packages = with pkgs; [
     noto-fonts-emoji
@@ -190,8 +240,6 @@ in
     enableRedistributableFirmware = true;
     sane = {
       enable = true;
-      extraBackends = [ pkgs.sane-airscan ];
-      disabledDefaultBackends = [ "escl" ];
     };
     bluetooth = {
       enable = true;
@@ -200,7 +248,7 @@ in
     pulseaudio.enable = false;
     graphics = {
       enable = true;
-      extraPackages = with pkgs;[
+      extraPackages = with pkgs; [
         amdvlk
       ];
       package = pkgs.mesa.drivers;
@@ -236,7 +284,10 @@ in
   nix = {
     settings = {
       auto-optimise-store = true;
-      experimental-features = [ "nix-command" "flakes" ];
+      experimental-features = [
+        "nix-command"
+        "flakes"
+      ];
       substituters = [ "https://hyprland.cachix.org" ];
       trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
     };
@@ -249,10 +300,12 @@ in
 
   home-manager = {
     useGlobalPkgs = true;
-    extraSpecialArgs = { inherit inputs;};
-    users.${username} = import ./home.nix;
+    extraSpecialArgs = {
+      inherit inputs user;
+    };
+    users.${user} = import ./home.nix;
     backupFileExtension = "backup";
   };
 
-  system.stateVersion = "24.05";
+  system.stateVersion = "24.11";
 }

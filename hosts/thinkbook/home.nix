@@ -1,15 +1,15 @@
-{ config, pkgs, ... }:
+{
+  config,
+  pkgs,
+  user,
+  ...
+}:
 
-let
-  username = "skewbik";
-  homeDirectory = "/home/${username}";
-  stateVersion = "24.05";
-in
 {
   home = {
-    username = username;
-    homeDirectory = homeDirectory;
-    stateVersion = stateVersion;
+    username = user;
+    homeDirectory = "/home/${user}";
+    stateVersion = "24.11";
     pointerCursor = {
       name = "macOS-Monterey";
       package = pkgs.apple-cursor;
@@ -18,7 +18,6 @@ in
       x11.enable = true;
     };
   };
-
 
   # services.hypridle = {
   #   settings = {

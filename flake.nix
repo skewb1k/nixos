@@ -7,18 +7,34 @@
     };
   };
 
-  outputs = { self, nixpkgs, ... }@inputs: {
-    nixosConfigurations = {
-      thinkbook= nixpkgs.lib.nixosSystem {
-        specialArgs = { inherit inputs; };
-        modules = [
-          # ./modules/zsh/module.nix
-          # ./modules/hypr/module.nix
-          # ./modules/waybar/module.nix
-          ./hosts/thinkbook/configuration.nix
-          inputs.home-manager.nixosModules.default
-        ];
+  outputs =
+    {
+      self,
+      nixpkgs,
+      ...
+    }@inputs:
+    let
+      inherit (self) outputs;
+
+      user = "skewbik";
+      system = "x86_64-linux";
+      pkgs = import nixpkgs {
+        inherit system;
+        config.allowUnfree = true;
+      };
+    in
+    {
+      nixosConfigurations = {
+        thinkbook = nixpkgs.lib.nixosSystem {
+          inherit system pkgs;
+          specialArgs = {
+            inherit inputs outputs user;
+          };
+          modules = [
+            ./hosts/thinkbook/configuration.nix
+            inputs.home-manager.nixosModules.default
+          ];
+        };
       };
     };
-  };
 }
