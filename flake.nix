@@ -16,6 +16,7 @@
     let
       inherit (self) outputs;
       user = "skewbik";
+      hostName = "thinkbook";
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
@@ -28,20 +29,7 @@
         thinkbook = nixpkgs.lib.nixosSystem {
           inherit system pkgs;
           specialArgs = {
-            inherit inputs outputs user;
-            users.users.${user} = {
-              isNormalUser = true;
-              shell = pkgs.zsh;
-              # extraGroups = [
-              #   "networkmanager"
-              #   "input"
-              #   "wheel"
-              #   "video"
-              #   "audio"
-              #   "tss"
-              #   "docker"
-              # ];
-            };
+            inherit inputs user stateVersion hostName;
           };
           modules = [
             ./hosts/thinkbook/configuration.nix

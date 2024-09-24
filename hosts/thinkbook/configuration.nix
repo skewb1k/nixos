@@ -1,10 +1,10 @@
 {
-  inputs,
-  lib,
   pkgs,
+  inputs,
   options,
   user,
   stateVersion,
+  hostName,
   ...
 }:
 
@@ -16,17 +16,34 @@
     ../../modules/flatpak.nix
     ../../modules/security.nix
     ../../modules/zsh/module.nix
-    ../../modules/waybar/module.nix
-    ../../modules/hypr/module.nix
+    ../../modules/htop/module.nix
+    ../../modules/nvim/module.nix
+    ../../modules/alacritty/module.nix
+    ../../modules/nh.nix
+    ../../modules/git.nix
     ../../modules/gnupg.nix
     ../../modules/bluetooth.nix
     ../../modules/virt.nix
+    ../../modules/waybar/module.nix
+    ../../modules/hypr/module.nix
   ];
-
+  users.users.${user} = {
+    isNormalUser = true;
+    shell = pkgs.zsh;
+    extraGroups = [
+      "networkmanager"
+      "input"
+      "wheel"
+      "video"
+      "audio"
+      "tss"
+      "docker"
+    ];
+  };
   networking = {
-    hostName = "thinkbook";
+    hostName = hostName;
     networkmanager.enable = true;
-    timeServers = options.networking.timeServers.default ++ [ "pool.ntp.org" ];
+    # timeServers = options.networking.timeServers.default ++ [ "pool.ntp.org" ];
   };
 
   time.timeZone = "Europe/Moscow";
@@ -35,28 +52,12 @@
   environment.systemPackages = with pkgs; [
     # Text editors and IDEs
     vim
-    neovim
     vscode
     zed-editor
     # jetbrains.idea-community-bin
     neovide
 
-    # Programming languages and tools
-    go
-    lua
-    python3
-    clang
-    rustup
-    nodePackages_latest.pnpm
-    nodePackages_latest.yarn
-    nodePackages_latest.nodejs
-    bun
-    jdk
-    # fnm
-
     # Version control and development tools
-    gh
-    # lazygit
     lazydocker
     bruno
     gnumake
@@ -67,9 +68,8 @@
     # Shell and terminal utilities
     wget
     killall
-    eza
+    # eza
     starship
-    alacritty
     zoxide
     fzf
     tmux
@@ -174,10 +174,7 @@
   ];
 
   services = {
-    git.enable = true;
-    lazygit.enable = true;
-    htop.enable = true;
-    nix-ld.enable = true;
+    # nix-ld.enable = true;
     supergfxd.enable = true;
     libinput.enable = true;
     fstrim.enable = true;
@@ -209,8 +206,8 @@
     pulseaudio.enable = false;
     graphics = {
       enable = true;
-      extraPackages = with pkgs; [
-        amdvlk
+      extraPackages = [
+        pkgs.amdvlk
       ];
       package = pkgs.mesa.drivers;
     };
@@ -219,7 +216,7 @@
   home-manager = {
     useGlobalPkgs = true;
     extraSpecialArgs = {
-      inherit inputs user;
+      inherit user stateVersion;
     };
     users.${user} = import ./home.nix;
     backupFileExtension = "backup";
