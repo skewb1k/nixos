@@ -84,8 +84,6 @@
     duf
 
     # System monitoring and management
-    htop
-    btop
     lm_sensors
 
     # Network and internet tools

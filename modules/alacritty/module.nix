@@ -1,6 +1,10 @@
-{...}:
 {
-  programs.alacritty = {
-    enable = true;
-  };
+  pkgs,
+  ...
+}:
+
+{
+  environment.systemPackages = [
+    pkgs.alacritty
+  ];
 }

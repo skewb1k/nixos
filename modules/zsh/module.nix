@@ -7,7 +7,7 @@
     syntaxHighlighting.enable = true;
     shellAliases =
       let
-        flakeDir = "~/nixos-config";
+        flakeDir = "~/nixos";
       in {
       rb = "sudo nixos-rebuild switch --flake ${flakeDir}";
       upd = "sudo nix flake update ${flakeDir}";
