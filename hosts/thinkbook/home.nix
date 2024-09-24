@@ -2,6 +2,7 @@
   config,
   pkgs,
   user,
+  stateVersion,
   ...
 }:
 
@@ -9,7 +10,7 @@
   home = {
     username = user;
     homeDirectory = "/home/${user}";
-    stateVersion = "24.11";
+    stateVersion = stateVersion;
     pointerCursor = {
       name = "macOS-Monterey";
       package = pkgs.apple-cursor;

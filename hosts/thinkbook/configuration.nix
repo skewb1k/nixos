@@ -4,38 +4,24 @@
   pkgs,
   options,
   user,
+  stateVersion,
   ...
 }:
 
 {
   imports = [
     ./hardware-configuration.nix
+    ../../modules/nix.nix
+    ../../modules/boot.nix
+    ../../modules/flatpak.nix
+    ../../modules/security.nix
     ../../modules/zsh/module.nix
     ../../modules/waybar/module.nix
-    ../../modules/virt.nix
-    ../../modules/gnupg.nix
     ../../modules/hypr/module.nix
+    ../../modules/gnupg.nix
+    ../../modules/bluetooth.nix
+    ../../modules/virt.nix
   ];
-
-  boot = {
-    kernelModules = [ "kvm-amd" ];
-    initrd.kernelModules = [ "amdgpu" ];
-
-    loader = {
-      efi = {
-        canTouchEfiVariables = true;
-        efiSysMountPoint = "/boot";
-      };
-      grub = {
-        enable = true;
-        device = "nodev";
-        efiSupport = true;
-        useOSProber = true;
-      };
-      timeout = 3;
-    };
-    plymouth.enable = true;
-  };
 
   networking = {
     hostName = "thinkbook";
@@ -45,22 +31,6 @@
 
   time.timeZone = "Europe/Moscow";
   i18n.defaultLocale = "en_US.UTF-8";
-
-  users = {
-    users.${user} = {
-      isNormalUser = true;
-      shell = pkgs.zsh;
-      extraGroups = [
-        "networkmanager"
-        "input"
-        "wheel"
-        "video"
-        "audio"
-        "tss"
-        "docker"
-      ];
-    };
-  };
 
   environment.systemPackages = with pkgs; [
     # Text editors and IDEs
@@ -85,9 +55,8 @@
     # fnm
 
     # Version control and development tools
-    git
     gh
-    lazygit
+    # lazygit
     lazydocker
     bruno
     gnumake
@@ -143,6 +112,7 @@
 
     # Browsers
     firefox-devedition
+    chromium
 
     # Gaming and entertainment
     stremio
@@ -165,7 +135,6 @@
     # swappy
     appimage-run
     playerctl
-    nh
 
     # Virtualization
     libvirt
@@ -205,11 +174,14 @@
   ];
 
   services = {
+    git.enable = true;
+    lazygit.enable = true;
+    htop.enable = true;
+    nix-ld.enable = true;
     supergfxd.enable = true;
     libinput.enable = true;
     fstrim.enable = true;
     openssh.enable = true;
-    flatpak.enable = true;
     auto-cpufreq.enable = true;
     # syncthing = {
     #   enable = true;
@@ -229,21 +201,10 @@
     };
   };
 
-  systemd.services = {
-    flatpak-repo = {
-      path = [ pkgs.flatpak ];
-      script = "flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo";
-    };
-  };
-
   hardware = {
     enableRedistributableFirmware = true;
     sane = {
       enable = true;
-    };
-    bluetooth = {
-      enable = true;
-      powerOnBoot = true;
     };
     pulseaudio.enable = false;
     graphics = {
@@ -252,49 +213,6 @@
         amdvlk
       ];
       package = pkgs.mesa.drivers;
-    };
-  };
-
-  services.blueman.enable = true;
-
-  security = {
-    rtkit.enable = true;
-    polkit = {
-      enable = true;
-      extraConfig = ''
-        polkit.addRule(function(action, subject) {
-          if (
-            subject.isInGroup("users")
-              && (
-                action.id == "org.freedesktop.login1.reboot" ||
-                action.id == "org.freedesktop.login1.reboot-multiple-sessions" ||
-                action.id == "org.freedesktop.login1.power-off" ||
-                action.id == "org.freedesktop.login1.power-off-multiple-sessions"
-              )
-            )
-          {
-            return polkit.Result.YES;
-          }
-        })
-      '';
-    };
-    pam.services.swaylock.text = "auth include login";
-  };
-
-  nix = {
-    settings = {
-      auto-optimise-store = true;
-      experimental-features = [
-        "nix-command"
-        "flakes"
-      ];
-      substituters = [ "https://hyprland.cachix.org" ];
-      trusted-public-keys = [ "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc=" ];
-    };
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than 7d";
     };
   };
 
@@ -307,5 +225,5 @@
     backupFileExtension = "backup";
   };
 
-  system.stateVersion = "24.11";
+  system.stateVersion = stateVersion;
 }
