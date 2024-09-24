@@ -9,6 +9,13 @@
     username = user;
     homeDirectory = "/home/${user}";
     stateVersion = stateVersion;
+    pointerCursor = {
+      name = "macOS-Monterey";
+      package = pkgs.apple-cursor;
+      size = 16;
+      gtk.enable = true;
+      x11.enable = true;
+    };
   };
 
   # services.hypridle = {
