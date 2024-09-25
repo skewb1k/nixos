@@ -1,6 +1,7 @@
 {
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixos-wsl.url = "github:nix-community/NixOS-WSL/main";
     home-manager = {
       url = "github:nix-community/home-manager/master";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -11,12 +12,13 @@
     {
       self,
       nixpkgs,
+      nixos-wsl,
       ...
     }@inputs:
     let
       inherit (self) outputs;
       user = "skewbik";
-      hostName = "thinkbook";
+      hostName = "wsl";
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
@@ -26,13 +28,14 @@
     in
     {
       nixosConfigurations = {
-        thinkbook = nixpkgs.lib.nixosSystem {
+        wsl = nixpkgs.lib.nixosSystem {
           inherit system pkgs;
           specialArgs = {
             inherit inputs user stateVersion hostName;
           };
           modules = [
-            ./hosts/thinkbook/configuration.nix
+	    nixos-wsl.nixosModules.default
+            ./hosts/wsl/configuration.nix
             inputs.home-manager.nixosModules.default
           ];
         };

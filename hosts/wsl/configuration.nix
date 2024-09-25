@@ -11,7 +11,6 @@
 {
   imports = [
     # ./hardware-configuration.nix
-    <nixos-wsl/modules>
     ../../modules/nix.nix
     # ../../modules/boot.nix
     # ../../modules/flatpak.nix
@@ -28,6 +27,7 @@
     # ../../modules/waybar/module.nix
     # ../../modules/hypr/module.nix
   ];
+
   wsl.enable = true;
   wsl.defaultUser = user;
 
