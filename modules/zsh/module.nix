@@ -13,7 +13,6 @@
       upd = "sudo nix flake update ${flakeDir}";
       upg = "sudo nixos-rebuild switch --upgrade --flake ${flakeDir}";
       scg = "sudo nix-collect-garbage -d";
-      hms = "home-manager switch --flake ${flakeDir}";
       hlr = "hyprctl reload";
 
       ff = "fastfetch";

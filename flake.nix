@@ -18,7 +18,6 @@
     let
       inherit (self) outputs;
       user = "skewbik";
-      hostName = "wsl";
       system = "x86_64-linux";
       pkgs = import nixpkgs {
         inherit system;
@@ -28,13 +27,23 @@
     in
     {
       nixosConfigurations = {
+        thinkbook = nixpkgs.lib.nixosSystem {
+          inherit system pkgs;
+          specialArgs = {
+            inherit inputs user stateVersion;
+          };
+          modules = [
+            ./hosts/thinkbook/configuration.nix
+            inputs.home-manager.nixosModules.default
+          ];
+        };
         wsl = nixpkgs.lib.nixosSystem {
           inherit system pkgs;
           specialArgs = {
-            inherit inputs user stateVersion hostName;
+            inherit inputs user stateVersion;
           };
           modules = [
-	    nixos-wsl.nixosModules.default
+	          nixos-wsl.nixosModules.default
             ./hosts/wsl/configuration.nix
             inputs.home-manager.nixosModules.default
           ];

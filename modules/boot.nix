@@ -14,6 +14,8 @@
       };
       grub = {
         enable = true;
+        default = "saved";
+        extraEntries = "GRUB_SAVEDEFAULT=true";
         device = "nodev";
         efiSupport = true;
         useOSProber = true;

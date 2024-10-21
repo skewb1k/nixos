@@ -4,7 +4,6 @@
   options,
   user,
   stateVersion,
-  hostName,
   ...
 }:
 
@@ -45,7 +44,6 @@
     ];
   };
   networking = {
-    hostName = hostName;
     networkmanager.enable = true;
     # timeServers = options.networking.timeServers.default ++ [ "pool.ntp.org" ];
   };
